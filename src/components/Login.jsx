@@ -40,8 +40,6 @@ function Login() {
                 }
             );
             
-            setIsLoggedIn(true);
-            localStorage.setItem('user', JSON.stringify(response.data.data.user));
             navigate('/');
             
         } catch (error) {
