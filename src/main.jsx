@@ -7,6 +7,7 @@ import Layout from '../Layout'
 import Home from './components/Home'
 import SignUp from './components/SignUp'
 import Login from './components/Login'
+import DashBoard from './components/DashBoard'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -14,7 +15,7 @@ const router = createBrowserRouter(
       <Route path='' element={<Home />} />
       <Route path='signup' element={<SignUp/>} />
       <Route path='login' element={<Login />} />
-      
+      <Route path='dashboard' element={<DashBoard />} />
     </Route>
   ),
 )
