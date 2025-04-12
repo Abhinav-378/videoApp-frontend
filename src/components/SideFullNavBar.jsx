@@ -7,16 +7,7 @@ function SideFullNavBar({ isOpen, onToggle }) {
       className={`h-screen bg-[#141414] fixed left-0 top-0 
       transition-all duration-300 text-white ${isOpen ? "w-64" : "w-20"}`}
     >
-      <button
-        onClick={onToggle}
-        className="fixed left-1 top-4 transform translate-x-1/2 
-          bg-[#9147ff] rounded-full p-2"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" />
-</svg>
-
-      </button>
+      
 
       <nav className={`mt-16 ${isOpen ? "px-4" : "px-2"}`}>
         <div
@@ -40,12 +31,12 @@ function SideFullNavBar({ isOpen, onToggle }) {
             />
           </svg>
 
-          {isOpen && <span>Home</span>}
+          {isOpen && <span className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+    isOpen ? "opacity-100 w-auto ml-2" : "opacity-0 w-0"
+  }`}>Home</span>}
         </div>
         <div
-          className={`flex items-center gap-4 py-2 ${
-            !isOpen && "justify-center"
-          }`}
+           className={`flex items-center gap-4 py-2 ${!isOpen && "justify-center"}`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +53,9 @@ function SideFullNavBar({ isOpen, onToggle }) {
             />
           </svg>
 
-          {isOpen && <span>Liked Videos</span>}
+          {isOpen && <span className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+    isOpen ? "opacity-100 w-auto ml-2" : "opacity-0 w-0"
+  }`}>Liked Videos</span>}
         </div>
         <div
           className={`flex items-center gap-4 py-2 ${
@@ -84,7 +77,9 @@ function SideFullNavBar({ isOpen, onToggle }) {
             />
           </svg>
 
-          {isOpen && <span>History</span>}
+          {isOpen && <span className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+    isOpen ? "opacity-100 w-auto ml-2" : "opacity-0 w-0"
+  }`}>History</span>}
         </div>
         <div
           className={`flex items-center gap-4 py-2 ${
@@ -106,7 +101,9 @@ function SideFullNavBar({ isOpen, onToggle }) {
             />
           </svg>
 
-          {isOpen && <span>My Content</span>}
+          {isOpen && <span className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+    isOpen ? "opacity-100 w-auto ml-2" : "opacity-0 w-0"
+  }`}>My Content</span>}
         </div>
         <div
           className={`flex items-center gap-4 py-2 ${
@@ -128,7 +125,9 @@ function SideFullNavBar({ isOpen, onToggle }) {
             />
           </svg>
 
-          {isOpen && <span>Collections</span>}
+          {isOpen && <span className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+    isOpen ? "opacity-100 w-auto ml-2" : "opacity-0 w-0"
+  }`}>Collections</span>}
         </div>
         <div
           className={`flex items-center gap-4 py-2 ${
@@ -150,7 +149,9 @@ function SideFullNavBar({ isOpen, onToggle }) {
             />
           </svg>
 
-          {isOpen && <span>Subscribers</span>}
+          {isOpen && <span className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+    isOpen ? "opacity-100 w-auto ml-2" : "opacity-0 w-0"
+  }`}>Subscribers</span>}
         </div>
       </nav>
     </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
-function Navbar() {
+function Navbar({ onToggle}) {
   const navigate = useNavigate()
   const [login, setLogin] = useState(false)
   const [userData, setUserData] = useState(null)
@@ -59,6 +59,26 @@ function Navbar() {
   return (
     <>
       <div className='flex justify-around items-center bg-[#141414] text-white p-4 h-16 fixed top-0 left-0 w-full z-10'>
+      <button
+        onClick={onToggle}
+        className="fixed left-1 top-4 transform translate-x-1/2 
+          bg-[#9147ff] rounded-full p-2"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3.75 9h16.5m-16.5 6.75h16.5"
+          />
+        </svg>
+      </button>
         <div className='' id='logo'>VideoTube</div>
         <div>
           {/* //search bar */}

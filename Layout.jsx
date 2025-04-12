@@ -20,12 +20,12 @@ function Layout() {
         <div className={`transition-all duration-300 ${
           isSidebarOpen ? 'w-64' : 'w-20'
         }`}>
-          <SideFullNavBar isOpen={isSidebarOpen} onToggle={toggleSidebar} />
+          <SideFullNavBar isOpen={isSidebarOpen}  />
         </div>
       )}
       <div className={`flex-1 transition-all duration-300`}>
-        <Navbar />
-        <main className="p-4">
+        <Navbar onToggle={toggleSidebar} />
+        <main className="p-4 pt-16">
           <Outlet />
         </main>
       </div>
