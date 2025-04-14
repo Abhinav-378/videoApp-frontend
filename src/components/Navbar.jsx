@@ -92,9 +92,11 @@ function Navbar({ onToggle}) {
             />
             {showDropdown && (
               <div id='details' className='absolute bg-[#141414] text-white p-4 rounded-md shadow-md shadow-purple-300/30 top-12 w-40 right-0 flex flex-col gap-1'>
+                <Link to={'dashboard'}>
                 <div className='text-lg px-3 py-1 hover:bg-[#303030] rounded-md cursor-pointer transition-all duration-300'>
                   View Profile
                 </div>
+                </Link>
                 <div className='text-lg px-3 py-1 hover:bg-[#7f3eff] rounded-md cursor-pointer transition-all duration-300' onClick={handleLogout}>
                   Log out
                 </div>
@@ -103,12 +105,16 @@ function Navbar({ onToggle}) {
           </div>
         ) : (
           <div>
-            <button className='bg-gray-700 text-white px-4 py-2 mx-2 rounded-sm'>
-              Login
-            </button>
-            <button className='bg-[#9147ff] text-white px-4 py-2 mx-2 rounded-sm'>
-              Signup
-            </button>
+            <Link to={'/login'}>
+              <button className='bg-gray-700 text-white px-4 py-2 mx-2 rounded-sm cursor-pointer'>
+                Login
+              </button>
+            </Link>
+            <Link to={'/signup'}>
+              <button className='bg-[#9147ff] text-white px-4 py-2 mx-2 rounded-sm cursor-pointer'>
+                Signup
+              </button>
+            </Link>
           </div>
         )}
       </div>
