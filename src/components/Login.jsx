@@ -4,12 +4,12 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-
+import { useAuth } from '../AuthContext'
 const API_URL = import.meta.env.VITE_API_URL;
 
 function Login() {
     const navigate = useNavigate();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { loginUser, fetchUser } = useAuth();
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -39,7 +39,7 @@ function Login() {
                     }
                 }
             );
-            
+            await fetchUser();
             navigate('/');
             
         } catch (error) {

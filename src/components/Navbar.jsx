@@ -1,39 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { useAuth } from '../AuthContext'
 import axios from 'axios'
 function Navbar({ onToggle}) {
   const navigate = useNavigate()
-  const [login, setLogin] = useState(false)
-  const [userData, setUserData] = useState(null)
+  const {user, login, logoutUser} = useAuth();
   const [showDropdown, setShowDropdown] = useState(false)
   const API_URL = import.meta.env.VITE_API_URL
-  const [loading, setLoading] = useState(false)
   // Check auth status on mount and when localStorage changes
-  useEffect(() => {
-    const fetchUser = async () => {
-      try{
-        setLoading(true)
-        const user = await axios.get(`${API_URL}/users/current-user`, {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        // console.log(user.data.data)
-        setUserData(user.data.data)
-        setLogin(true)
-      }
-      catch (error) {
-        setLogin(false)
-        setUserData(null)
-        console.error('Error fetching user data:', error)
-      }
-      finally {
-        setLoading(false)
-      }
-    }
-    fetchUser();
-  }, [])
 
   async function handleLogout() {
     try {
@@ -43,8 +17,7 @@ function Navbar({ onToggle}) {
           'Content-Type': 'application/json',
         },
       })
-      setLogin(false)
-      setUserData(null)
+      logoutUser();
       setShowDropdown(false)
       navigate('/login')
     } catch (error) {
@@ -87,7 +60,7 @@ function Navbar({ onToggle}) {
         {/* // if user is logged in, show profile picture and username else login and signup buttons */}
         {login ? (
           <div className='relative'>
-            <img src={userData?.avatar} alt="user" className='w-10 h-10 rounded-full shadow-md shadow-purple-500/30 cursor-pointer'
+            <img src={user?.avatar} alt="user" className='w-10 h-10 rounded-full shadow-md shadow-purple-500/30 cursor-pointer'
               onClick={handleDropdown}
             />
             {showDropdown && (
