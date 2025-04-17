@@ -24,7 +24,7 @@ function DashBoard() {
             "Content-Type": "application/json",
           },
         });
-        console.log(user.data.data);
+        console.log("helooooo: ",user.data.data);
         setUserData(user.data.data);
         console.log("userData:", userData);
       } catch (error) {
@@ -71,17 +71,39 @@ function DashBoard() {
     getChannelStats();
     getChannelVideos();
     fetchUser();
+    // console.log("userData111:", userData);
   }, []);
+  const handleDelete = async (videoId) => {
+    try {
+      setLoading(true);
+      const res = await axios.delete(`${API_URL}/videos/${videoId}`, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(res.data.data);
+      setUserVideos((prevVideos) =>
+        prevVideos.filter((video) => video._id !== videoId)
+      );
+    } catch (error) {
+      console.error("Error deleting video:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="text-white">
-        {showModal && (
-            <UploadVideoModal
-                setShowModal={setShowModal}
-                userData={userData}
-            />
-            )}
-        {/* loading */}
-        
+      {showModal && (
+        <UploadVideoModal setShowModal={setShowModal} userData={userData} />
+      )}
+      {/* loading */}
+      {loading && (
+        <div className="flex justify-center items-center h-screen w-full bg-black opacity-50 fixed top-0 left-0 z-50">
+          Loading...
+        </div>
+      )}
 
       {/* show coverImage if present */}
       {userData && userData.coverImage && (
@@ -183,6 +205,87 @@ function DashBoard() {
           </div>
         </div>
         {/* will display all the videos in a table later after implementing upload video feature*/}
+        {/* TABLE consists of toggleStatus, status, uploaded(small thumbnail with title), uploaded on, likes and each row will contain its own delete and edit icon for updating a video */}
+        <div className="w-full">
+          <table className="w-full text-left border-collapse border border-gray-700 mt-5">
+            <tr className="bg-gray-800 text-gray-200">
+              <th className="border border-gray-700 px-4 py-2">Toggle</th>
+              <th className="border border-gray-700 px-4 py-2">Status</th>
+              <th className="border border-gray-700 px-4 py-2">Uploaded</th>
+              <th className="border border-gray-700 px-4 py-2">Uploaded On</th>
+              <th className="border border-gray-700 px-4 py-2">Likes</th>
+              <th className="border border-gray-700 px-4 py-2">Actions</th>
+            </tr>
+            {userVideos &&
+              userVideos.map((video) => (
+                <tr key={video._id} className="bg-gray-900 text-gray-200">
+                  <td className="border border-gray-700 px-4 py-2">
+                    {/* toggle switch */}
+                    <input
+                      type="checkbox"
+                      checked={video.isPublished}
+                      onChange={() => {}}
+                    />
+                  </td>
+                  <td className="border border-gray-700 px-4 py-2">
+                    {video.isPublished ? "Published" : "Unpublished"}
+                  </td>
+                  <td className="border border-gray-700 px-4 py-2 flex items-center gap-x-3">
+                    <img
+                      src={video.thumbnail}
+                      alt={video.title}
+                      className="w-[100px] h-[50px] object-cover rounded-lg"
+                    />
+                    {video.title}
+                  </td>
+                  <td className="border border-gray-700 px-4 py-2">
+                    {new Date(video.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="border border-gray-700 px-4 py-2">{0}</td>
+                  <td className="border border-none py-2 px-4 ">
+                    <div className="flex justify-around items-center gap-3">
+
+                    {/* edit and delete icons */}
+                    <div>
+                      {/* edit */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    </div>
+                    <div className="cursor-pointer" onClick={() => handleDelete(video._id)}> 
+                      {/* delete */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                        />
+                      </svg>
+                    </div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+          </table>
+        </div>
       </div>
     </div>
   );
