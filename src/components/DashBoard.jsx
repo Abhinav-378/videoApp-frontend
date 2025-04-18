@@ -24,7 +24,7 @@ function DashBoard() {
             "Content-Type": "application/json",
           },
         });
-        console.log("helooooo: ",user.data.data);
+        console.log("helooooo: ", user.data.data);
         setUserData(user.data.data);
         console.log("userData:", userData);
       } catch (error) {
@@ -73,6 +73,33 @@ function DashBoard() {
     fetchUser();
     // console.log("userData111:", userData);
   }, []);
+  const togglePublish = async (videoId) => {
+    try {
+      setLoading(true);
+      const res = await axios.patch(
+        `${API_URL}/videos/toggle/publish/${videoId}`,
+        {},
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(res.data.data);
+      setUserVideos((prevVideos) =>
+        prevVideos.map((video) =>
+          video._id === videoId
+            ? { ...video, isPublished: !video.isPublished }
+            : video
+        )
+      );
+    } catch (error) {
+      console.error("Error toggling publish status:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleDelete = async (videoId) => {
     try {
       setLoading(true);
@@ -91,7 +118,7 @@ function DashBoard() {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="text-white">
@@ -221,11 +248,18 @@ function DashBoard() {
                 <tr key={video._id} className="bg-gray-900 text-gray-200">
                   <td className="border border-gray-700 px-4 py-2">
                     {/* toggle switch */}
-                    <input
-                      type="checkbox"
-                      checked={video.isPublished}
-                      onChange={() => {}}
-                    />
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        class="sr-only peer"
+                        value=""
+                        checked={video.isPublished}
+                        onChange={() => togglePublish(video._id)}
+                      />
+                      <div
+                        className="group peer bg-white rounded-full duration-300 w-10 h-5 ring-2 ring-red-500 after:duration-300 after:bg-red-500 peer-checked:after:bg-green-500 peer-checked:ring-green-500 after:rounded-full after:absolute after:h-4 after:w-4 after:top-[2px] after:left-[2px] after:flex after:justify-center after:items-center peer-checked:after:translate-x-5 peer-hover:after:scale-95"
+                      ></div>
+                    </label>
                   </td>
                   <td className="border border-gray-700 px-4 py-2">
                     {video.isPublished ? "Published" : "Unpublished"}
@@ -244,42 +278,44 @@ function DashBoard() {
                   <td className="border border-gray-700 px-4 py-2">{0}</td>
                   <td className="border border-none py-2 px-4 ">
                     <div className="flex justify-around items-center gap-3">
-
-                    {/* edit and delete icons */}
-                    <div>
-                      {/* edit */}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-6"
+                      {/* edit and delete icons */}
+                      <div>
+                        {/* edit */}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="size-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                          />
+                        </svg>
+                      </div>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => handleDelete(video._id)}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                        />
-                      </svg>
-                    </div>
-                    <div className="cursor-pointer" onClick={() => handleDelete(video._id)}> 
-                      {/* delete */}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                        />
-                      </svg>
-                    </div>
+                        {/* delete */}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="size-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                          />
+                        </svg>
+                      </div>
                     </div>
                   </td>
                 </tr>
