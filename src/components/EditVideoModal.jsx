@@ -2,27 +2,28 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-useEffect(() => {
-    // Cleanup thumbnail preview URL when component unmounts
-    return () => {
-      if (videoData.thumbnail) {
-        URL.revokeObjectURL(URL.createObjectURL(videoData.thumbnail));
-      }
-    };
-  }, [videoData.thumbnail]);
-
 function EditVideoModal({ setShowEditModal, editVideoData, setEditVideoData }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const API_URL = import.meta.env.VITE_API_URL;
-
+  const [previewURL, setPreviewURL] = useState(null);
   const [videoData, setVideoData] = useState({
     title: editVideoData.title,
     description: editVideoData.description,
     thumbnail: null
   });
-
+  
+useEffect(() => {
+    if (videoData.thumbnail) {
+      const url = URL.createObjectURL(videoData.thumbnail);
+      setPreviewURL(url);
+      return () => {
+        URL.revokeObjectURL(url); // cleanup the old one
+      };
+    }
+  }, [videoData.thumbnail]);
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setVideoData(prev => ({
@@ -122,7 +123,7 @@ function EditVideoModal({ setShowEditModal, editVideoData, setEditVideoData }) {
             >
               {/* Preview Image */}
               <img 
-                src={videoData.thumbnail ? URL.createObjectURL(videoData.thumbnail) : editVideoData.thumbnail}
+                src={videoData.thumbnail ? previewURL : editVideoData.thumbnail}
                 alt="Video thumbnail" 
                 className="w-full h-full object-cover"
               />
