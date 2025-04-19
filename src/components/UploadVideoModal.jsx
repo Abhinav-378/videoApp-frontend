@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function UploadVideoModal({ setShowModal, userData }) {
+function UploadVideoModal({ setShowModal, userData, onSuccess }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -65,6 +65,7 @@ function UploadVideoModal({ setShowModal, userData }) {
       );
       
       setSuccess('Video uploaded successfully!');
+      await onSuccess()
       setShowModal(false)
       // setTimeout(() => setShowModal(false), 2000);
     } catch (error) {

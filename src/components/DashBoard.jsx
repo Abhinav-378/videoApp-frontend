@@ -16,7 +16,23 @@ function DashBoard() {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editVideoData, setEditVideoData] = useState(null);
-
+  const getChannelVideos = async () => {
+    try {
+      setLoading(true);
+      const userVideos = await axios.get(`${API_URL}/dashboard/videos`, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(userVideos.data.data);
+      setUserVideos(userVideos.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -54,23 +70,7 @@ function DashBoard() {
         setLoading(false);
       }
     };
-    const getChannelVideos = async () => {
-      try {
-        setLoading(true);
-        const userVideos = await axios.get(`${API_URL}/dashboard/videos`, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        console.log(userVideos.data.data);
-        setUserVideos(userVideos.data.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    
     getChannelStats();
     getChannelVideos();
     fetchUser();
@@ -129,7 +129,7 @@ function DashBoard() {
   return (
     <div className="text-white">
       {showModal && (
-        <UploadVideoModal setShowModal={setShowModal} userData={userData} />
+        <UploadVideoModal setShowModal={setShowModal} userData={userData} onSuccess={getChannelVideos} />
       )}
       {showEditModal && (
         <EditVideoModal setShowEditModal={setShowEditModal} editVideoData={editVideoData} setEditVideoData={setEditVideoData} />
