@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import UploadVideoModal from "./UploadVideoModal";
+import EditVideoModal from "./EditVideoModal";
 const API_URL = import.meta.env.VITE_API_URL;
 
 function DashBoard() {
@@ -13,6 +14,8 @@ function DashBoard() {
   const [userVideos, setUserVideos] = useState(null);
   const [userData, setUserData] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editVideoData, setEditVideoData] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -119,11 +122,17 @@ function DashBoard() {
       setLoading(false);
     }
   };
-
+  const handleEdit = (video) => {
+    setEditVideoData(video);
+    setShowEditModal(true);
+  };
   return (
     <div className="text-white">
       {showModal && (
         <UploadVideoModal setShowModal={setShowModal} userData={userData} />
+      )}
+      {showEditModal && (
+        <EditVideoModal setShowEditModal={setShowEditModal} editVideoData={editVideoData} setEditVideoData={setEditVideoData} />
       )}
       {/* loading */}
       {loading && (
@@ -279,7 +288,10 @@ function DashBoard() {
                   <td className="border border-none py-2 px-4 ">
                     <div className="flex justify-around items-center gap-3">
                       {/* edit and delete icons */}
-                      <div>
+                      <div
+                      className="cursor-pointer"
+                      onClick={()=>handleEdit(video)}
+                      >
                         {/* edit */}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -298,7 +310,7 @@ function DashBoard() {
                       </div>
                       <div
                         className="cursor-pointer"
-                        onClick={() => handleDelete(video._id)}
+                        onClick={() => handleDelete(video)}
                       >
                         {/* delete */}
                         <svg
