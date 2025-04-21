@@ -9,6 +9,7 @@ import SignUp from './components/SignUp'
 import Login from './components/Login'
 import DashBoard from './components/DashBoard'
 import { AuthProvider } from './AuthContext'
+import ChannelPage from './components/ChannelPage'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />} >
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
       <Route path='signup' element={<SignUp/>} />
       <Route path='login' element={<Login />} />
       <Route path='dashboard' element={<DashBoard />} />
+      <Route path='channel/:userid' element={<ChannelPage />} />
     </Route>
   ),
 )
