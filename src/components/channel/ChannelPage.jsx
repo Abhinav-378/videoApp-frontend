@@ -1,5 +1,5 @@
 import React, { use } from "react";
-import { Link, useParams, NavLink, Outlet } from "react-router-dom";
+import { Link, useParams, NavLink, Outlet, useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -185,7 +185,7 @@ function ChannelPage() {
                 Subscribed
               </NavLink>
             </div>
-            <Outlet />
+            <Outlet context={{userId: userData?._id}} />
 
 
           </div>
