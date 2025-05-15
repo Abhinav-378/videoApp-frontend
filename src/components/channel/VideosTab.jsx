@@ -43,10 +43,10 @@ function VideosTab() {
         <div className='flex justify-center items-center h-48 w-full '>
             No videos uploaded yet
         </div> :
-        <div className='flex gap-2 flex-col md:flex-row items-start justify-start w-full mt-5'>
+        <div className='flex gap-2 flex-col sm:flex-row items-start justify-start w-full mt-5'>
             {
                 videosList.map((video)=>(
-                    <div key={video._id} className=" flex flex-col w-1/3 justify-start items-start gap-4 p-4">
+                    <div key={video._id} className="flex flex-col w-full sm:w-1/2 md:w-1/3 justify-start items-start gap-4 p-4 ">
                         <img src={video.thumbnail} alt={video.title} className=" rounded-lg w-full h-auto " />
                         <div className="channel-info">
                             <h2 className="text-base text-white">{video.title}</h2>

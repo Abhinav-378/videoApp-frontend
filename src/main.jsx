@@ -9,7 +9,11 @@ import SignUp from './components/SignUp'
 import Login from './components/Login'
 import DashBoard from './components/DashBoard'
 import { AuthProvider } from './AuthContext'
-import ChannelPage from './components/ChannelPage'
+import ChannelPage from './components/channel/ChannelPage'
+import VideosTab from './components/channel/VideosTab'
+import PlaylistsTab from './components/channel/PlaylistsTab'
+import TweetsTab from './components/channel/TweetsTab'
+import SubscribedTab from './components/channel/SubscribedTab'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />} >
@@ -17,7 +21,12 @@ const router = createBrowserRouter(
       <Route path='signup' element={<SignUp/>} />
       <Route path='login' element={<Login />} />
       <Route path='dashboard' element={<DashBoard />} />
-      <Route path='channel/:userid' element={<ChannelPage />} />
+      <Route path='channel/:userid' element={<ChannelPage/>} >
+        <Route index element={<VideosTab />} />
+        <Route path="playlists" element={<PlaylistsTab />} />
+        <Route path="tweets" element={<TweetsTab />} />
+        <Route path="subscribed" element={<SubscribedTab />} />
+      </Route>
     </Route>
   ),
 )
