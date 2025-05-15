@@ -40,14 +40,14 @@ function SubscribedTab() {
           Loading...
         </div>
       )}
-      {error && (
+      {/* {error && (
         <div className="flex justify-center items-center h-screen w-full fixed top-0 left-0 z-50">
           <h1 className="text-3xl text-white">{error}</h1>
         </div>
-      )}
+      )} */}
         <div>
         {channelList.length === 0 ?
-        <div className='flex justify-center items-center h-screen w-full '>
+        <div className='flex justify-center items-center h-48 w-full '>
             No channels subscribed yet
         </div> :
         <div className='flex flex-col gap-4 px-5 md:px-24'>
