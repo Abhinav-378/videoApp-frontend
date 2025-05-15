@@ -1,5 +1,5 @@
 import React, { use } from "react";
-import { Link, useParams, NavLink, Outlet, useOutletContext } from "react-router-dom";
+import { Link, useParams, NavLink, Outlet, useOutletContext, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -13,6 +13,7 @@ function ChannelPage() {
   const [currUser, setCurrUser] = useState(null);
   const [userVideos, setUserVideos] = useState(null);
   const { userid } = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -25,7 +26,7 @@ function ChannelPage() {
         });
         setCurrUser(user.data.data);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        setCurrUser(null);
       } finally {
         setLoading(false);
       }
@@ -53,6 +54,10 @@ function ChannelPage() {
     fetchUser();
   }, [userid]);
   const toggleSubscription = async (userId) => {
+    if(!currUser) {
+      navigate("/login");
+      return;
+    }
     try {
       setLoading(true);
       const response = await axios.post(
@@ -90,11 +95,11 @@ function ChannelPage() {
           Loading...
         </div>
       )}
-      {error && (
+      {/* {error && (
         <div className="flex justify-center items-center h-screen w-full fixed top-0 left-0 z-50">
           <h1 className="text-3xl text-white">{error}</h1>
         </div>
-      )}
+      )} */}
       {/* show userdata if present */}
       {userData && (
         <>
@@ -185,7 +190,7 @@ function ChannelPage() {
                 Subscribed
               </NavLink>
             </div>
-            <Outlet context={{userId: userData?._id}} />
+            <Outlet context={{userId: userData?._id, currUser:currUser, channelUser: userData}} />
 
 
           </div>
