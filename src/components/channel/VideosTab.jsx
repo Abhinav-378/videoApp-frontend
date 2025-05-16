@@ -1,6 +1,6 @@
 import React, { use, useEffect, useState } from 'react'
 import axios from 'axios';
-import { useParams, useOutletContext } from 'react-router-dom';
+import { useParams, useOutletContext, Link } from 'react-router-dom';
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
 
@@ -46,12 +46,15 @@ function VideosTab() {
         <div className='flex gap-2 flex-col sm:flex-row items-start justify-start w-full mt-5'>
             {
                 videosList.map((video)=>(
-                    <div key={video._id} className="flex flex-col w-full sm:w-1/2 md:w-1/3 justify-start items-start gap-4 p-4 ">
-                        <img src={video.thumbnail} alt={video.title} className=" rounded-lg w-full h-auto " />
+                    <Link className='flex flex-col w-full sm:w-1/2 md:w-1/3 justify-start items-start gap-4 p-4 ' to={`/watch/${video._id}`} key={video._id}>
+                        <div className='relative'>
+                            <img src={video.thumbnail} alt={video.title} className=" rounded-lg w-full h-auto " />
+                            <div className='absolute bottom-2 right-2 rounded-md bg-black/70 px-2 py-1 text-sm'>{video.duration}</div>          
+                        </div>
                         <div className="channel-info">
                             <h2 className="text-base text-white">{video.title}</h2>
                         </div>
-                    </div>
+                    </Link>
                     )
                 )
             }
