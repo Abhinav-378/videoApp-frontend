@@ -14,6 +14,7 @@ import VideosTab from './components/channel/VideosTab'
 import PlaylistsTab from './components/channel/PlaylistsTab'
 import TweetsTab from './components/channel/TweetsTab'
 import SubscribedTab from './components/channel/SubscribedTab'
+import VideoPage from './components/VideoPage'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />} >
@@ -27,6 +28,7 @@ const router = createBrowserRouter(
         <Route path="tweets" element={<TweetsTab />} />
         <Route path="subscribed" element={<SubscribedTab />} />
       </Route>
+      <Route path='watch/:videoId' element={<VideoPage />} />
     </Route>
   ),
 )
