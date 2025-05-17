@@ -6,7 +6,7 @@ import { useAuth } from "../AuthContext";
 
 function VideoPage() {
   const { videoId } = useParams();
-  const {user} = useAuth();
+  const { user } = useAuth();
   const [video, setVideo] = useState(null);
   const [channel, setChannel] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -50,14 +50,14 @@ function VideoPage() {
       console.error("Error fetching channel:", error);
     }
   };
-  const toggleSubscription = async() => {
-    if(!user){
-        navigate('/login');
-        return;
+  const toggleSubscription = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
     }
     try {
       setLoading(true);
-        const response = await axios.post(
+      const response = await axios.post(
         `${API_URL}/subscriptions/c/${channel?._id}`,
         {},
         {
@@ -65,25 +65,25 @@ function VideoPage() {
           headers: {
             "Content-Type": "application/json",
           },
-        });
-        setChannel((prev)=>({
-           ...prev,
-           isSubscribed : !prev.isSubscribed,
-           subscriberCount: prev.isSubscribed?
-            prev.subscriberCount-1 : prev.subscriberCount+1
-        }))
-      
+        }
+      );
+      setChannel((prev) => ({
+        ...prev,
+        isSubscribed: !prev.isSubscribed,
+        subscriberCount: prev.isSubscribed
+          ? prev.subscriberCount - 1
+          : prev.subscriberCount + 1,
+      }));
     } catch (error) {
-        setError(error.response.data.message || "Something went wrong");
-        console.error("Error fetching channel:", error);
-    }
-    finally {
+      setError(error.response.data.message || "Something went wrong");
+      console.error("Error fetching channel:", error);
+    } finally {
       setLoading(false);
     }
-  }
+  };
   const addtoWatchHistory = async () => {
-    if(!user){
-        return;
+    if (!user) {
+      return;
     }
     try {
       const response = await axios.post(
@@ -158,23 +158,32 @@ function VideoPage() {
                 </p>
               </div>
             </div>
-            
-            <div
-            onClick={() => {
-                toggleSubscription(channel?._id);
-            }}
-            >
-            {channel?.isSubscribed ? (
-                <button className="bg-[#4d4d4d] text-white rounded-full px-4 py-2 hover:bg-[#343434]">
-                Unsubscribe
-                </button>
+            {user?.username === channel?.username ? (
+              <button
+                className="bg-[#4d4d4d] text-white rounded-full px-4 py-2 hover:bg-[#343434]"
+                onClick={() => {
+                  navigate(`/dashboard`);
+                }}
+              >
+                Manage Videos
+              </button>
             ) : (
-                <button className="bg-[#9147ff] text-white rounded-full px-4 py-2 hover:bg-[#7a3fdb]">
-                Subscribe
-                </button>
+              <div
+                onClick={() => {
+                  toggleSubscription(channel?._id);
+                }}
+              >
+                {channel?.isSubscribed ? (
+                  <button className="bg-[#4d4d4d] text-white rounded-full px-4 py-2 hover:bg-[#343434]">
+                    Unsubscribe
+                  </button>
+                ) : (
+                  <button className="bg-[#9147ff] text-white rounded-full px-4 py-2 hover:bg-[#7a3fdb]">
+                    Subscribe
+                  </button>
+                )}
+              </div>
             )}
-            </div>
-            
           </div>
           <div className="w-full bg-[#303030] p-3 rounded-2xl my-3">
             <p className="text-base font-semibold text-gray-300 ">
