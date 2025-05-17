@@ -53,6 +53,7 @@ function VideosTab() {
                         </div>
                         <div className="channel-info">
                             <h2 className="text-base text-white">{video.title}</h2>
+                            <p className='text-sm text-gray-400'>{video.views} views</p>
                         </div>
                     </Link>
                     )
