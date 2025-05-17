@@ -81,6 +81,27 @@ function VideoPage() {
       setLoading(false);
     }
   }
+  const addtoWatchHistory = async () => {
+    if(!user){
+        return;
+    }
+    try {
+      const response = await axios.post(
+        `${API_URL}/users/history`,
+        { videoId: videoId },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Watch history updated", response.data);
+    } catch (error) {
+      console.error("Error updating watch history:", error);
+    }
+  };
+
   function timeAgo(dateString) {
     const now = new Date();
     const date = new Date(dateString);
@@ -95,6 +116,7 @@ function VideoPage() {
   }
   useEffect(() => {
     fetchVideo();
+    addtoWatchHistory();
   }, [videoId]);
   useEffect(() => {
     if (video) {
