@@ -19,8 +19,8 @@ function VideosTab() {
                         "Content-Type": "application/json",
                     },
                 });
-                console.log("videos", response);
-                setvideosList(response.data.data);
+                const videos = response.data.data.filter((video) => video.isPublished);
+                setvideosList(videos);
             } catch (error) {
                 console.error("Error fetching videos:", error);
             }

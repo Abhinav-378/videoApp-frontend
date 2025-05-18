@@ -22,8 +22,8 @@ function HistoryPage() {
           "Content-Type": "application/json",
         },
       });
-      console.log("history", response.data.data);
-      setHistory(response.data.data);
+      const videos = response.data.data.filter((video) => video.isPublished);
+      setHistory(videos);
     } catch (error) {
       setError(error.response.data.message || "Something went wrong");
       console.error("Error fetching history:", error);

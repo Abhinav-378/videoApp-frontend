@@ -22,7 +22,7 @@ function LikedPage() {
           "Content-Type": "application/json",
         },
       });
-      const videos = response.data.data
+      const videos = response.data.data.filter((video) => video.isPublished);
 
       setLikedVideos(videos);
 

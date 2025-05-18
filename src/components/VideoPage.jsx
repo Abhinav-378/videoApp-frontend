@@ -24,6 +24,10 @@ function VideoPage() {
           "Content-Type": "application/json",
         },
       });
+      if (response.data.data.isPublished === false) {
+        setError("This video is not published yet");
+        return;
+      }
       setVideo(response.data.data);
       // console.log("video", response.data.data);
     } catch (error) {
