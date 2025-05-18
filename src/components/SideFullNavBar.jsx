@@ -39,8 +39,9 @@ function SideFullNavBar({ isOpen, onToggle }) {
             </span>
           )}
         </div>
+        <Link to="/liked">
         <div
-          className={`flex items-center gap-4 py-2 ${
+          className={`flex items-center gap-4 py-2 hover:bg-[#242424] rounded-xl ${
             !isOpen && "justify-center"
           }`}
         >
@@ -69,6 +70,7 @@ function SideFullNavBar({ isOpen, onToggle }) {
             </span>
           )}
         </div>
+        </Link>
         <Link to="/history">
         <div
           className={`flex items-center gap-4 py-2 hover:bg-[#242424] rounded-xl ${
