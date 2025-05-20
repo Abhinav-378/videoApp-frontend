@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../AuthContext";
+import PlaylistModal from "./PlaylistModal";
 
 function VideoPage() {
   const { videoId } = useParams();
@@ -12,6 +13,7 @@ function VideoPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [liked, setLiked] = useState(false);
+  const [showPlaylistModal, setShowPlaylistModal] = useState(false);
   const navigate = useNavigate();
   const API_URL =
     import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
@@ -159,7 +161,9 @@ function VideoPage() {
       console.error("Error updating watch history:", error);
     }
   };
-
+  const openPlaylistModal = () => {
+    setShowPlaylistModal(true);
+  }
   function timeAgo(dateString) {
     const now = new Date();
     const date = new Date(dateString);
@@ -198,6 +202,11 @@ useEffect(() => {
           <h1 className="text-3xl text-white">{error}</h1>
         </div>
       )}
+      {
+        showPlaylistModal && (
+          <PlaylistModal setShowPlaylistModal={setShowPlaylistModal} setLoading={setLoading}  />
+        )
+      }
       {video && (
         <div className="flex flex-col items-start justify-center gap-2 w-full md:w-[80%] ">
           <video controls className="w-full mt-4 rounded-lg">
@@ -207,7 +216,7 @@ useEffect(() => {
           <h1 className="text-white text-xl my-2 font-semibold">
             {video.title}
           </h1>
-          <div className="flex flex-row justify-between items-center w-full px-5">
+          <div className="flex flex-col md:flex-row justify-around items-start md:justify-between md:items-center w-full px-5">
             <div className="flex flex-row justify-center items-center gap-2">
               <img
                 src={channel?.avatar}
@@ -221,7 +230,7 @@ useEffect(() => {
                 </p>
               </div>
             </div>
-            <div className="flex flex-row justify-center items-center gap-2">
+            <div className="flex flex-row justify-between items-center gap-2 md:gap-4 w-full md:w-auto">
               <div onClick={() => {toggleLike(video?._id)}} className="flex flex-col justify-center items-center ">
                 {
                   liked
@@ -236,7 +245,17 @@ useEffect(() => {
                 }
                 {video?.likes} Likes
               </div>
-            
+              <div>
+                {/* add to playlist button */}
+                <div className="px-3 py-2 bg-white rounded-2xl text-black flex flex-row justify-center items-center gap-2 cursor-pointer hover:bg-gray-200" onClick={() => {openPlaylistModal()}}>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                  </svg>
+                  <span className="hidden md:block">
+                    Save
+                  </span>
+                </div>
+              </div>
             {user?.username === channel?.username ? (
               <button
                 className="bg-[#4d4d4d] text-white rounded-full px-4 py-2 hover:bg-[#343434]"
