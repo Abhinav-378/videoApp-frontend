@@ -16,6 +16,7 @@ function DashBoard() {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editVideoData, setEditVideoData] = useState(null);
+  const navigate = useNavigate();
   const getChannelVideos = async () => {
     try {
       setLoading(true);
@@ -48,6 +49,9 @@ function DashBoard() {
         console.log("userData:", userData);
       } catch (error) {
         console.error("Error fetching user data:", error);
+        if (error.response.status === 401) {
+          navigate("/login");
+        }
       } finally {
         setLoading(false);
       }
@@ -244,6 +248,7 @@ function DashBoard() {
         {/* TABLE consists of toggleStatus, status, uploaded(small thumbnail with title), uploaded on, likes and each row will contain its own delete and edit icon for updating a video */}
         <div className="w-full">
           <table className="w-full text-left border-collapse border border-gray-700 mt-5">
+            <thead>
             <tr className="bg-gray-800 text-gray-200">
               <th className="border border-gray-700 px-4 py-2">Toggle</th>
               <th className="border border-gray-700 px-4 py-2">Status</th>
@@ -252,6 +257,8 @@ function DashBoard() {
               <th className="border border-gray-700 px-4 py-2">Likes</th>
               <th className="border border-gray-700 px-4 py-2">Actions</th>
             </tr>
+            </thead>
+            <tbody>
             {userVideos &&
               userVideos.map((video) => (
                 <tr key={video._id} className="bg-gray-900 text-gray-200">
@@ -332,6 +339,7 @@ function DashBoard() {
                   </td>
                 </tr>
               ))}
+            </tbody>
           </table>
         </div>
       </div>
