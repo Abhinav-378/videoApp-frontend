@@ -162,6 +162,10 @@ function VideoPage() {
     }
   };
   const openPlaylistModal = () => {
+    if(!user){
+      alert("Please login to create a playlist");
+      return;
+    }
     setShowPlaylistModal(true);
   }
   function timeAgo(dateString) {
