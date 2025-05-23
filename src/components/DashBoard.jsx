@@ -317,7 +317,7 @@ function DashBoard() {
                       </div>
                       <div
                         className="cursor-pointer"
-                        onClick={() => handleDelete(video)}
+                        onClick={() => handleDelete(video._id)}
                       >
                         {/* delete */}
                         <svg
