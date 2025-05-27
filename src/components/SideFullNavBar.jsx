@@ -1,10 +1,22 @@
-import React, { use } from "react";
+import React, { useEffect } from "react";
 // import { HomeIcon } from '@heroicons/react/outline'
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 function SideFullNavBar({ isOpen, onToggle }) {
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024 && isOpen) {
+        onToggle(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isOpen, onToggle]);
+
   const handleChannelClick = () => {
     if (!user) {
       alert("Please login to access this feature");
@@ -15,7 +27,7 @@ function SideFullNavBar({ isOpen, onToggle }) {
   return (
     <div
       className={`sm:h-screen bg-[#141414] fixed left-0 sm:top-0 bottom-0
-      transition-all duration-300 text-white ${isOpen ? "w-56" : "sm:w-20 w-full"}`}
+      transition-all duration-300 text-white ${isOpen ? "w-56" : "sm:w-20 w-full z-10"}`}
     >
       <nav className={`flex flex-row justify-around sm:flex-col sm:mt-16 ${isOpen ? "px-4" : "px-2"}`}>
         <Link to="/">
@@ -135,7 +147,7 @@ function SideFullNavBar({ isOpen, onToggle }) {
           </div>
         </Link>
         <div
-            className={`hidden sm:flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1 "} }  py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"
+            className={`hidden cursor-pointer sm:flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1 "} }  py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"
               }`}
           onClick={() => handleChannelClick()}
 
