@@ -19,6 +19,7 @@ import HistoryPage from './components/HistoryPage'
 import LikedPage from './components/LikedPage'
 import PlaylistPage from './components/PlaylistPage'
 import Subscribers from './components/Subscribers'
+import SearchPage from './components/SearchPage'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />} >
@@ -37,6 +38,7 @@ const router = createBrowserRouter(
       <Route path='liked' element={<LikedPage />} />
       <Route path='playlist/:playlistId' element={<PlaylistPage />} />
       <Route path='subscribers' element={<Subscribers />} />
+      <Route path='search/:query' element={<SearchPage />} />
     </Route>
   ),
 )
