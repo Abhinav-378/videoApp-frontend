@@ -254,8 +254,8 @@ function TweetsTab() {
           ))}
         </div>
       ) : (
-        <div className="flex justify-center items-center w-full fixed top-0 left-0">
-          <h1 className="text-3xl text-red">No tweets yet</h1>
+        <div className="flex justify-center items-center w-full my-16">
+          <h1 className="text-2xl">No tweets yet</h1>
         </div>
       )}
     </div>
