@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../AuthContext";
 import PlaylistModal from "./PlaylistModal";
+import Comments from "./Comments";
 
 function VideoPage() {
   const { videoId } = useParams();
@@ -31,7 +32,7 @@ function VideoPage() {
         return;
       }
       setVideo(response.data.data);
-      // console.log("video", response.data.data);
+      console.log("video", response.data.data);
     } catch (error) {
       setError(error.response.data.message || "Something went wrong");
       console.error("Error fetching video:", error);
@@ -59,7 +60,7 @@ function VideoPage() {
   };
   const checkLike = async (videoId) => {
     if(!user) {
-      console.log("User not logged in for like check");
+      // console.log("User not logged in for like check");
       return;
     }
     try {
@@ -156,7 +157,7 @@ function VideoPage() {
           },
         }
       );
-      console.log("Watch history updated", response.data);
+      // console.log("Watch history updated", response.data);
     } catch (error) {
       console.error("Error updating watch history:", error);
     }
@@ -293,6 +294,14 @@ useEffect(() => {
               {video.views} views • {timeAgo(video.createdAt)}
             </p>
             <p>{video.description}</p>
+          </div>
+          <div className="w-full  p-3 rounded-2xl my-3">
+            <h2 className="text-lg font-semibold mb-2">Comments</h2>
+            {
+              video && video.owner && (
+                <Comments videoOwnerId={video.owner._id} />
+              )
+            }
           </div>
         </div>
       )}
