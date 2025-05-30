@@ -76,6 +76,83 @@ function Comments({ videoOwnerId }) {
         setLoading(false);
       }
     }
+    const handleEditComment = async (comment) => {
+      if (!user) {
+        return;
+      }
+      // replace comment with a textarea and a save button
+      const commentElement = document.getElementById(`comment-${comment._id}`);
+      const cont = commentElement.getElementsByClassName("content")
+      const textarea = document.createElement("textarea");
+      textarea.value = comment.content;
+      textarea.className = "w-full h-auto bg-[#111111] text-white border border-gray-600 rounded-lg p-4 pr-10";
+      const saveButton = document.createElement("button");
+      saveButton.innerText = "Save";
+      saveButton.className = "absolute bottom-3 right-2 md:right-3 text-white px-2 md:px-4 py-2 rounded-lg cursor-pointer hover:text-[#9147ff] transition duration-100";
+      // hide cont element and show input with save btn instead and on save show cont element with updated content
+      if (cont[0]) {
+        cont[0].style.display = "none";
+      }
+      // Insert textarea and save button after the content element
+      cont[0].parentNode.insertBefore(textarea, cont[0].nextSibling);
+      cont[0].parentNode.insertBefore(saveButton, textarea.nextSibling);
+
+      saveButton.onclick = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.patch(
+        `${VITE_API_URL}/comments/c/${comment._id}`,
+        {
+          content: textarea.value,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+          );
+          // Update content and show it
+          cont[0].textContent = textarea.value;
+          cont[0].style.display = "";
+          // Remove textarea and save button
+          textarea.remove();
+          saveButton.remove();
+          fetchComments();
+        } catch (error) {
+          console.error("Error editing comment:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+    }
+
+    const handleDeleteComment = async (commentId) => {
+      if (!user) {
+        return;
+      }
+      setLoading(true);
+      try {
+        const response = await axios.delete(
+          `${VITE_API_URL}/comments/c/${commentId}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(response.data.data);
+        setCommentsList((prevComments) =>
+          prevComments.filter((comment) => comment._id !== commentId)
+        );
+      } catch (error) {
+        console.error("Error deleting comment:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
     useEffect(() => {
       fetchComments();
     }, [videoId]); 
@@ -109,21 +186,21 @@ function Comments({ videoOwnerId }) {
       {commentsList.length > 0 ? (
         <div className="flex flex-col gap-4 px-5  pt-4">
           {commentsList.map((comment) => (
-            <div key={comment._id} className="w-full p-4 ">
+            <div key={comment._id} id={`comment-${comment._id}`} className="w-full p-4 ">
               <div className="flex items-start gap-4">
                 <img
                   src={comment.ownerAvatar}
                   alt="user"
                   className="w-10 h-10 rounded-full"
                 />
-                <div className="flex flex-col">
+                <div className="flex flex-col relative w-full">
                   <p className="text-lg text-white font-semibold">@{comment.ownerName}
-                    <span className="text-sm text-gray-500 font-medium "> &emsp; {timeAgo(comment.updatedAt)} </span>
+                    <span className="text-sm text-gray-500 font-medium "> &emsp; {timeAgo(comment.createdAt)} </span>
                   </p>
-                  <p>{comment.content}</p>
+                  <p className="content">{comment.content}</p>
                   
                     {/* like button */}
-                  {/* <div onClick={() => togglecommentLike(comment)} className="flex items-center gap-4 mt-2">
+                  {/* <div onClick={() => toggleCommentLike(comment)} className="flex items-center gap-4 mt-2">
                     {
                       (user && comment.likesDetails && comment.likesDetails.some(like => like.likedBy === currUser._id)) ?
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 cursor-pointer text-rose-500">
@@ -141,18 +218,18 @@ function Comments({ videoOwnerId }) {
                 </div>
               </div>
               {/* edit and delete option if curruser is equal to channeluser */}
-              {/* {currUser && channelUser && currUser._id === channelUser._id ? (
+              {user && comment?.ownerName && user.username==comment.ownerName ? (
                 <div className="flex justify-end gap-4 mt-2">
-                  <button className="text-[#ae77ff] hover:text-[#9147ff]  hover:bg-gray-800 px-3 py-1 cursor-pointer rounded-lg  transition duration-100" onClick={() => handleEditcomment(comment)} >
+                  <button className="text-[#ae77ff] hover:text-[#9147ff]  hover:bg-gray-800 px-3 py-1 cursor-pointer rounded-lg  transition duration-100" onClick={() => handleEditComment(comment)} >
                     Edit
                   </button>
-                  <button className="text-red-400 hover:text-red-600 hover:bg-gray-800 px-3 py-1 cursor-pointer rounded-lg transition duration-100" onClick={() => { handleDeletecomment(comment._id) }}>
+                  <button className="text-red-400 hover:text-red-600 hover:bg-gray-800 px-3 py-1 cursor-pointer rounded-lg transition duration-100" onClick={() => { handleDeleteComment(comment._id) }}>
                     Delete
                   </button>
                 </div>
               ) : (
                 <></>
-              )} */}
+              )}
 
             </div>
           ))}
