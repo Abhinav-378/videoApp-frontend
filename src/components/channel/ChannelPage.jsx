@@ -2,6 +2,7 @@ import React, { use } from "react";
 import { Link, useParams, NavLink, Outlet, useOutletContext, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../../AuthContext";
 
 const VITE_API_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
@@ -10,27 +11,10 @@ function ChannelPage() {
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
-  const [currUser, setCurrUser] = useState(null);
-  const [userVideos, setUserVideos] = useState(null);
+  const { user } = useAuth();
   const { userid } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        setLoading(true);
-        const user = await axios.get(`${VITE_API_URL}/users/current-user`, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        setCurrUser(user.data.data);
-      } catch (error) {
-        setCurrUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
     const fetchUserData = async () => {
       setLoading(true);
       try {
@@ -51,10 +35,34 @@ function ChannelPage() {
       }
     };
     fetchUserData();
-    fetchUser();
   }, [userid]);
+  const checkSubscription = async (channelId) => {
+    if (!user) {
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `${VITE_API_URL}/subscriptions/c/checkSubscription/${channelId}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setUserData((prev) => ({
+        ...prev,
+        isSubscribed: response.data.data,
+      }));
+      console.log("subscription check", userData);
+    } catch (error) {
+      setError(error?.response?.data?.message || "Something went wrong");
+      console.error("Error fetching channel:", error);
+    }
+  };
+
   const toggleSubscription = async (userId) => {
-    if(!currUser) {
+    if(!user) {
       navigate("/login");
       return;
     }
@@ -87,6 +95,12 @@ function ChannelPage() {
       setLoading(false);
     }
   }
+  useEffect(() => {
+    if (user && userData?._id) {
+      checkSubscription(userData?._id);
+    }
+  }, [userData?._id, user]);
+
   return (
     <div className="text-white">
       {/* loading */}
@@ -131,7 +145,7 @@ function ChannelPage() {
               </div>
             </div>
             <div className="pr-5">
-              {currUser?.username !== userData?.username ? (
+              {user?.username !== userData?.username ? (
                 <div onClick={() => {toggleSubscription(userData?._id)}}>
                   {userData?.isSubscribed ? 
                     <button className="bg-[#4d4d4d] text-white rounded-lg px-4 py-2 hover:bg-[#343434]" >
@@ -190,7 +204,7 @@ function ChannelPage() {
                 Subscribed
               </NavLink>
             </div>
-            <Outlet context={{userId: userData?._id, currUser:currUser, channelUser: userData}} />
+            <Outlet context={{userId: userData?._id, currUser:user, channelUser: userData}} />
 
 
           </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../AuthContext";
@@ -51,13 +51,38 @@ function VideoPage() {
           },
         }
       );
-      // console.log("channel", response.data.data);
+      console.log("channel", response.data.data);
       setChannel(response.data.data);
     } catch (error) {
       setError(error.response.data.message || "Something went wrong");
       console.error("Error fetching channel:", error);
     }
   };
+  const checkSubscription = async (channelId) => {
+    if (!user) {
+      // console.log("User not logged in for subscription check");
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `${API_URL}/subscriptions/c/checkSubscription/${channelId}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("subscription", response.data.data);
+      setChannel((prev) => ({
+        ...prev,
+        isSubscribed: response.data.data,
+      }));
+    } catch (error) {
+      setError(error.response.data.message || "Something went wrong");
+      console.error("Error fetching channel:", error);
+    }
+  }
   const checkLike = async (videoId) => {
     if(!user) {
       // console.log("User not logged in for like check");
@@ -192,9 +217,18 @@ useEffect(() => {
     fetchChannel(video.owner.username);
   }
 }, [video]);
+
   useEffect(() => {
+  if (user && channel?._id) {
+    checkSubscription(channel._id);
+  }
+}, [user, channel?._id]); 
+
+useEffect(() => {
+  if (user) {
     checkLike(videoId);
-  }, [user]);
+  }
+}, [user, videoId]); 
   return (
     <div className="text-white">
       {loading && (
@@ -222,6 +256,7 @@ useEffect(() => {
             {video.title}
           </h1>
           <div className="flex flex-col md:flex-row justify-around items-start md:justify-between md:items-center w-full px-5">
+            <Link to={`/channel/${channel?.username}`} >
             <div className="flex flex-row justify-center items-center gap-2">
               <img
                 src={channel?.avatar}
@@ -235,6 +270,7 @@ useEffect(() => {
                 </p>
               </div>
             </div>
+            </Link>
             <div className="flex flex-row justify-between items-center gap-2 md:gap-4 w-full md:w-auto">
               <div onClick={() => {toggleLike(video?._id)}} className="flex flex-col justify-center items-center ">
                 {
