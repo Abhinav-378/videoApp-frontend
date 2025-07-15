@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../AuthContext'
 import axios from 'axios'
@@ -7,8 +7,49 @@ function Navbar({ onToggle }) {
   const { user, login, logoutUser } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false)
   const API_URL = import.meta.env.VITE_API_URL
-  
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Add refs and timer state
+  const dropdownRef = useRef(null)
+  const timeoutRef = useRef(null)
+
+  // Auto-close dropdown functionality
+  useEffect(() => {
+    if (showDropdown) {
+      // Clear any existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+      
+      // Set new timeout to close dropdown after 2 seconds
+      timeoutRef.current = setTimeout(() => {
+        setShowDropdown(false)
+      }, 2000)
+    }
+
+    // Cleanup timeout on unmount or when dropdown closes
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [showDropdown])
+
+  // Handle mouse enter - cancel auto-close
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+  }
+
+  // Handle mouse leave - restart auto-close timer
+  const handleMouseLeave = () => {
+    if (showDropdown) {
+      timeoutRef.current = setTimeout(() => {
+        setShowDropdown(false)
+      }, 1000)
+    }
+  }
 
   const handleChange = (e) => {
     setSearchQuery(e.target.value);
@@ -40,6 +81,9 @@ function Navbar({ onToggle }) {
       navigate('/login')
     } catch (error) {
       console.error('Logout failed:', error)
+      // logout locally
+      logoutUser();
+      navigate('/login')
     }
   }
 
@@ -94,18 +138,29 @@ function Navbar({ onToggle }) {
         </div>
         {/* // if user is logged in, show profile picture and username else login and signup buttons */}
         {login ? (
-          <div className='relative'>
-            <img src={user?.avatar} alt="user" className='w-10 h-10 rounded-full shadow-md shadow-purple-500/30 cursor-pointer'
+          <div className='relative' ref={dropdownRef}>
+            <img 
+              src={user?.avatar} 
+              alt="user" 
+              className='w-10 h-10 rounded-full shadow-md shadow-purple-500/30 cursor-pointer'
               onClick={handleDropdown}
             />
             {showDropdown && (
-              <div id='details' className='absolute bg-[#141414] text-white p-4 rounded-md shadow-md shadow-purple-300/30 top-12 w-40 right-0 flex flex-col gap-1'>
+              <div 
+                id='details' 
+                className='absolute bg-[#141414] text-white p-4 rounded-md shadow-md shadow-purple-300/30 top-12 w-40 right-0 flex flex-col gap-1'
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
                 <Link to={'dashboard'}>
                   <div className='text-lg px-3 py-1 hover:bg-[#303030] rounded-md cursor-pointer transition-all duration-300'>
                     View Profile
                   </div>
                 </Link>
-                <div className='text-lg px-3 py-1 hover:bg-[#7f3eff] rounded-md cursor-pointer transition-all duration-300' onClick={handleLogout}>
+                <div 
+                  className='text-lg px-3 py-1 hover:bg-[#7f3eff] rounded-md cursor-pointer transition-all duration-300' 
+                  onClick={handleLogout}
+                >
                   Log out
                 </div>
               </div>
