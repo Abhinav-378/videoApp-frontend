@@ -3,15 +3,16 @@ import { useEffect, useState } from 'react'
 import { useOutletContext, Link } from 'react-router-dom'
 import axios from 'axios'
 
-
 function PlaylistsTab() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [playlists, setPlaylists] = useState([])
+  const [thumbnailsLoaded, setThumbnailsLoaded] = useState(false)
   const { userId } = useOutletContext();
   const API_URL =
     import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
   const defaultThumbnail = "https://res.cloudinary.com/dwpegmm0x/image/upload/v1747997594/bwrzblj0soanjfrdjopn.jpg"
+
   const fetchPlaylists = async () => {
     try {
       setLoading(true)
@@ -24,8 +25,14 @@ function PlaylistsTab() {
           },
         }
       )
-      // console.log('response: ', response.data.data)
-      setPlaylists(response.data.data)
+      console.log('response playlists: ', response.data.data)
+      const playlistsData = response.data.data
+      setPlaylists(playlistsData)
+      
+      // Fetch thumbnails after getting playlists
+      if (playlistsData && playlistsData.length > 0) {
+        await fetchPlaylistThumbnails(playlistsData)
+      }
     } catch (error) {
       console.error('Error fetching playlists:', error)
       setError(error?.response?.data?.message || 'Something went wrong')
@@ -33,44 +40,56 @@ function PlaylistsTab() {
       setLoading(false)
     }
   }
-  const fetchPlaylistThumbnail = async () => {
-    let i = 0;
-    for (let playlist of playlists) {
-      if (playlist.videos.length == 0) {
-        playlists[i].thumbnail = defaultThumbnail
-      } else {
-        const videoId = playlist.videos[0]
-        try {
-          setLoading(true)
-          const response = await axios.get(
-            `${API_URL}/videos/${videoId}`,
-            {
-              withCredentials: true,
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          )
-          // console.log('response: ', response.data.data)
-          playlists[i].thumbnail = response.data.data.thumbnail
-        } catch (error) {
-          console.error('Error fetching playlist thumbnail:', error)
-          setError(error?.response?.data?.message || 'Something went wrong')
-        }
-        finally {
-          setLoading(false)
-        }
 
-      }
-      i++;
+  const fetchPlaylistThumbnails = async (playlistData) => {
+    if (!playlistData || playlistData.length === 0) return
+
+    try {
+      const updatedPlaylists = await Promise.all(
+        playlistData.map(async (playlist) => {
+          let thumbnail = defaultThumbnail
+          
+          if (playlist.videos && playlist.videos.length > 0) {
+            // Handle both cases: video ID directly or video object with _id
+            const videoId = typeof playlist.videos[0] === 'string' 
+              ? playlist.videos[0] 
+              : playlist.videos[0]._id || playlist.videos[0]
+
+            try {
+              const response = await axios.get(`${API_URL}/videos/${videoId}`, {
+                withCredentials: true,
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              })
+              thumbnail = response.data.data?.thumbnail || defaultThumbnail
+            } catch (error) {
+              console.error(`Error fetching thumbnail for video ${videoId}:`, error)
+              // Keep default thumbnail on error
+            }
+          }
+          
+          return {
+            ...playlist,
+            thumbnail
+          }
+        })
+      )
+      
+      setPlaylists(updatedPlaylists)
+      setThumbnailsLoaded(true)
+    } catch (error) {
+      console.error('Error fetching playlist thumbnails:', error)
+      setError(error?.response?.data?.message || 'Something went wrong')
     }
   }
+
   useEffect(() => {
-    fetchPlaylists()
-  }, [])
-  useEffect(() => {
-    fetchPlaylistThumbnail()
-  }, [playlists])
+    if (userId) {
+      fetchPlaylists()
+    }
+  }, [userId])
+
   return (
     <div>
       {loading && (
@@ -95,18 +114,22 @@ function PlaylistsTab() {
           <div className="flex flex-col md:flex-row gap-4">
             {playlists.map((playlist) => (
               <div key={playlist._id} className="text-white w-full md:w-1/3 justify-start items-start p-3">
-                <Link to={`/playlist/${playlist._id}`} key={playlist._id}>
-                  <div className=' relative  w-full aspect-video'>
+                <Link to={`/playlist/${playlist._id}`}>
+                  <div className='relative w-full aspect-video'>
                     <img
-                      src={playlist.thumbnail}
+                      src={playlist.thumbnail || defaultThumbnail}
                       alt={playlist.name}
-                      className=" rounded-lg w-full h-full object-cover object-center "
+                      className="rounded-lg w-full h-full object-cover object-center"
+                      onError={(e) => {
+                        e.target.src = defaultThumbnail
+                      }}
                     />
                     <p className='absolute bottom-2 right-2 rounded-md bg-black/70 text-white px-2 py-1 text-sm flex items-center gap-1'>
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5V18M15 7.5V18M3 16.811V8.69c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811Z" />
                       </svg>
-                      {playlist.videos.length} videos</p>
+                      {playlist.videos?.length || 0} videos
+                    </p>
                   </div>
                   <div className='font-semibold text-lg my-2'>
                     {playlist.name}
