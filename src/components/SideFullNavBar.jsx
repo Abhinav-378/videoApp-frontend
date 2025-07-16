@@ -24,6 +24,14 @@ function SideFullNavBar({ isOpen, onToggle }) {
     }
     navigate(`/channel/${user.username}/playlists`);
   };
+  const handleMyContentClick = () => {
+    if (!user) {
+      alert("Please login to access your content");
+      navigate('/login');
+      return;
+    }
+    navigate(`/channel/${user.username}`);
+  };
   return (
     <div
       className={`sm:h-screen bg-[#141414] fixed left-0 sm:top-0 bottom-0
@@ -118,7 +126,7 @@ function SideFullNavBar({ isOpen, onToggle }) {
             </span>
           </div>
         </Link>
-        <Link to={`channel/${user?.username}`} >
+        <div onClick={handleMyContentClick}>
           <div
             className={`flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1 "} }  py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"
               }`}
@@ -145,7 +153,7 @@ function SideFullNavBar({ isOpen, onToggle }) {
               My Content
             </span>
           </div>
-        </Link>
+        </div>
         <div
             className={`hidden cursor-pointer sm:flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1 "} }  py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"
               }`}
