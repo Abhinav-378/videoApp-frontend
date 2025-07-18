@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-// import { HomeIcon } from '@heroicons/react/outline'
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
+
 function SideFullNavBar({ isOpen, onToggle }) {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ function SideFullNavBar({ isOpen, onToggle }) {
     }
     navigate(`/channel/${user.username}/playlists`);
   };
+  
   const handleMyContentClick = () => {
     if (!user) {
       alert("Please login to access your content");
@@ -32,18 +33,17 @@ function SideFullNavBar({ isOpen, onToggle }) {
     }
     navigate(`/channel/${user.username}`);
   };
+
   return (
     <div
       className={`sm:h-screen bg-[#141414] fixed left-0 sm:top-0 bottom-0
-      transition-all duration-300 text-white ${isOpen ? "w-56" : "sm:w-20 w-full z-10"}`}
+      transition-all duration-300 text-white z-20 ${isOpen ? "w-56" : "sm:w-20 w-full"}`}
     >
       <nav className={`flex flex-row justify-around sm:flex-col sm:mt-16 ${isOpen ? "px-4" : "px-2"}`}>
         <Link to="/">
           <div
-            className={`flex  ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1 "} }  py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"
-              }`}
+            className={`flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1"} py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"}`}
           >
-            {/* home logo */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -59,20 +59,17 @@ function SideFullNavBar({ isOpen, onToggle }) {
               />
             </svg>
 
-
             <span
-              className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isOpen ? "w-auto ml-2" : "w-auto text-xs"
-                }`}
+              className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isOpen ? "w-auto ml-2" : "w-auto text-xs"}`}
             >
               Home
             </span>
-
           </div>
         </Link>
+
         <Link to="/liked">
           <div
-            className={`flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1 "} }  py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"
-              }`}
+            className={`flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1"} py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"}`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -90,18 +87,16 @@ function SideFullNavBar({ isOpen, onToggle }) {
             </svg>
 
             <span
-              className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isOpen ? "w-auto ml-2" : "w-auto text-xs"
-                }`}
+              className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isOpen ? "w-auto ml-2" : "w-auto text-xs"}`}
             >
               Liked
             </span>
-
           </div>
         </Link>
+
         <Link to="/history">
           <div
-            className={`flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1 "} }  py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"
-              }`}
+            className={`flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1"} py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"}`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -119,17 +114,16 @@ function SideFullNavBar({ isOpen, onToggle }) {
             </svg>
 
             <span
-              className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isOpen ? "w-auto ml-2" : "w-auto text-xs"
-                }`}
+              className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isOpen ? "w-auto ml-2" : "w-auto text-xs"}`}
             >
               History
             </span>
           </div>
         </Link>
+
         <div onClick={handleMyContentClick}>
           <div
-            className={`flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1 "} }  py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"
-              }`}
+            className={`flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1"} py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"} cursor-pointer`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -147,18 +141,16 @@ function SideFullNavBar({ isOpen, onToggle }) {
             </svg>
 
             <span
-              className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isOpen ? "w-auto ml-2" : "w-auto text-xs"
-                }`}
+              className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isOpen ? "w-auto ml-2" : "w-auto text-xs"}`}
             >
               My Content
             </span>
           </div>
         </div>
-        <div
-            className={`hidden cursor-pointer sm:flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1 "} }  py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"
-              }`}
-          onClick={() => handleChannelClick()}
 
+        <div
+          className={`hidden cursor-pointer sm:flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1"} py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"}`}
+          onClick={() => handleChannelClick()}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -176,39 +168,37 @@ function SideFullNavBar({ isOpen, onToggle }) {
           </svg>
 
           <span
-            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isOpen ? "w-auto ml-2" : "w-auto text-xs"
-              }`}
+            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isOpen ? "w-auto ml-2" : "w-auto text-xs"}`}
           >
             Collections
           </span>
         </div>
-        <Link to="/subscribers" >
-        <div 
-            className={`flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1 "} }  py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"
-              }`}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-7"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-            />
-          </svg>
 
-          <span
-            className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isOpen ? "w-auto ml-2" : "w-auto text-xs"
-              }`}
+        <Link to="/subscribers">
+          <div 
+            className={`flex ${isOpen ? "flex-row items-center gap-4" : "flex-col items-center gap-1"} py-2 px-1 hover:bg-[#242424] rounded-xl ${!isOpen && "justify-center"}`}
           >
-            Subscribers
-          </span>
-        </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-7"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+              />
+            </svg>
+
+            <span
+              className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isOpen ? "w-auto ml-2" : "w-auto text-xs"}`}
+            >
+              Subscribers
+            </span>
+          </div>
         </Link>
       </nav>
     </div>

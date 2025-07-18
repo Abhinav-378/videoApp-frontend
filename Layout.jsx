@@ -21,24 +21,18 @@ function Layout() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const noSidebarRoutes = ['/login', '/signup', '/forgot-password'];
-  const showSidebar = !noSidebarRoutes.includes(location.pathname);
-
   const toggleSidebar = () => {
     setIsSidebarOpen(prev => !prev);
   };
 
   return (
     <div className="flex h-screen">
-      {showSidebar && (
-        <div className={`transition-all duration-300 ${isSidebarOpen ? 'w-56' : 'sm:w-20 w-0'
-          }`}>
-          <SideFullNavBar
-            isOpen={isSidebarOpen}
-            onToggle={toggleSidebar}
-          />
-        </div>
-      )}
+      <div className={`transition-all duration-300 ${isSidebarOpen ? 'w-56' : 'sm:w-20 w-0'}`}>
+        <SideFullNavBar
+          isOpen={isSidebarOpen}
+          onToggle={toggleSidebar}
+        />
+      </div>
       <div className={`flex-1 transition-all duration-300`}>
         <Navbar onToggle={toggleSidebar} />
         <main className="p-4 pt-16">
