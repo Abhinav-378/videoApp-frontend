@@ -1,6 +1,6 @@
 import React, { use, useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import EditTweetModal from "./EditTweetModal";
 
 const VITE_API_URL =
@@ -9,7 +9,6 @@ const VITE_API_URL =
 function TweetsTab() {
   const [tweetsList, setTweetsList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { channelname } = useParams();
   const [editTweetData, setEditTweetData] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const { userId, currUser, channelUser } = useOutletContext();

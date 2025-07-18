@@ -1,13 +1,12 @@
 import React, { use, useEffect, useState } from 'react'
 import axios from 'axios';
-import { useParams, useOutletContext, Link } from 'react-router-dom';
+import { useOutletContext, Link } from 'react-router-dom';
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
 
 function VideosTab() {
     const [ videosList, setvideosList ] = useState([])
     const [loading, setLoading] = useState(false);
-    const { channelname } = useParams();
     const {userId} = useOutletContext();
     useEffect(() => {
         const fetchVideos = async () => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { useParams, useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
 
@@ -9,7 +9,6 @@ function SubscribedTab() {
     const [ channelList, setChannelList ] = useState([])
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const { channelname } = useParams();
     const {userId} = useOutletContext();
     useEffect(() => {
         const fetchSubscribedChannels = async () => {
