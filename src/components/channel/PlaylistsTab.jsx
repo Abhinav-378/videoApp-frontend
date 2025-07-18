@@ -1,14 +1,23 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { useOutletContext, Link } from 'react-router-dom'
+import { useOutletContext, Link, useParams } from 'react-router-dom'
 import axios from 'axios'
+import { useAuth } from '../../AuthContext'
 
 function PlaylistsTab() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [playlists, setPlaylists] = useState([])
   const [thumbnailsLoaded, setThumbnailsLoaded] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [playlistToDelete, setPlaylistToDelete] = useState(null)
   const { userId } = useOutletContext();
+  
+  const { user } = useAuth();
+  const { channelusername } = useParams()
+
+  console.log("user: ", user);
+  console.log("username: ", channelusername);
   const API_URL =
     import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
   const defaultThumbnail = "https://res.cloudinary.com/dwpegmm0x/image/upload/v1747997594/bwrzblj0soanjfrdjopn.jpg"
@@ -84,6 +93,35 @@ function PlaylistsTab() {
     }
   }
 
+  const handleDeleteClick = (playlist) => {
+    setPlaylistToDelete(playlist)
+    setShowDeleteModal(true)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!playlistToDelete) return
+
+    try {
+      await axios.delete(`${API_URL}/playlists/${playlistToDelete._id}`, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      setPlaylists((prev) => prev.filter((playlist) => playlist._id !== playlistToDelete._id))
+      setShowDeleteModal(false)
+      setPlaylistToDelete(null)
+    } catch (error) {
+      console.error('Error deleting playlist:', error)
+      setError(error?.response?.data?.message || 'Something went wrong')
+    }
+  }
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false)
+    setPlaylistToDelete(null)
+  }
+
   useEffect(() => {
     if (userId) {
       fetchPlaylists()
@@ -105,6 +143,34 @@ function PlaylistsTab() {
       {!loading && !error && playlists.length === 0 && (
         <div className="flex justify-center items-center w-full my-24 text-white text-2xl">
           No playlists found
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-[#1a1a1a] rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-xl font-semibold text-white mb-4">
+              Delete Playlist
+            </h3>
+            <p className="text-gray-300 mb-6">
+              Are you sure you want to delete "{playlistToDelete?.name}"? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={handleDeleteCancel}
+                className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors cursor-pointer"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -130,11 +196,25 @@ function PlaylistsTab() {
                       </svg>
                       {playlist.videos?.length || 0} videos
                     </p>
-                  </div>
-                  <div className='font-semibold text-lg my-2'>
-                    {playlist.name}
-                  </div>
+                  </div>                  
                 </Link>
+                <div className='flex flex-row justify-between items-center mt-2'>
+                  <Link to={`/playlist/${playlist._id}`}>
+                    <div className='font-semibold text-lg my-2'>
+                      {playlist.name}
+                    </div>
+                    </Link>
+                    {
+                      channelusername === user?.username && (
+                        <div 
+                          onClick={() => handleDeleteClick(playlist)} 
+                          className='text-red-500 text-sm cursor-pointer hover:text-red-400 transition-colors'
+                        >
+                          Delete
+                        </div>
+                      )
+                    }
+                  </div>
               </div>
             ))}
           </div>
