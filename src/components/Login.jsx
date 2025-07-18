@@ -56,9 +56,9 @@ function Login() {
     }
   return (
     <>
-      <div className='flex flex-col md:flex-row justify-center items-center bg-[#111111] text-white min-h-screen'>
-        <div className='flex flex-col justify-center items-center gap-3 bg-[#111111] text-white p-4 h-screen fixed left-0 text-left w-[100vw] md:w-[50vw]'>
-            <h1 className='text-3xl font-bold text-center'>Login</h1>
+      <div className='flex flex-col md:flex-row justify-center items-center bg-[#111111] text-white min-h-screen w-full'>
+        <div className='flex flex-col justify-center items-center gap-3 bg-[#111111] text-white p-4 w-full md:w-1/2'>
+            <h1 className='text-3xl md:text-4xl font-bold text-center'>Login</h1>
             <p className='text-sm text-center'>Welcome back! Please login to your account</p>
             {/* form */}
             <form className='mt-5 flex flex-col justify-center items-center gap-3 bg-[#111111] text-white p-4 rounded-md w-full max-w-md' onSubmit={handleSubmit}>
@@ -98,7 +98,7 @@ function Login() {
                 <p className='text-sm'>Don't have an account? <a href="/signup" className='text-[#9147ff]'>Sign Up</a></p>
             </form>
         </div>
-        <div className='hidden md:flex justify-center items-center bg-[#111111] text-white p-4 h-screen fixed right-0 text-left w-[50vw]'>
+        <div className='hidden md:flex justify-center items-center bg-[#111111] text-white p-4 w-full md:w-1/2'>
             {/* image with drop shadow of grey*/}
             <img src={loginImg} alt="login" style={{ filter: 'drop-shadow(2px 4px 6px rgba(214, 190, 255, 0.5))' }}  /> 
         </div>
