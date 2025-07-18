@@ -69,11 +69,11 @@ function SignUp() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row bg-[#141414] text-white p-4  min-h-screen w-full pt-16 overflow-y-auto ">
+    <div className="flex flex-col md:flex-row just items-center  text-white px-4 w-full overflow-y-auto ">
       {/* Registration Form Section */}
       <div className="flex flex-col justify-center items-center gap-3 w-full md:w-1/2 p-4">
-        <h1 className="text-4xl md:text-5xl font-bold">Register</h1>
-        <p className="text-sm text-gray-400 py-2">
+        <h1 className="text-3xl md:text-4xl font-bold">Register</h1>
+        <p className="text-sm text-gray-400 py-1">
           Before we start, please create your account
         </p>
 
@@ -188,7 +188,7 @@ function SignUp() {
             {loading ? 'Registering...' : isRegistered ? 'Registered' : 'Register'}
           </button>
 
-          <p className="text-sm mt-2">
+          <p className="text-sm ">
             Already have an account?{' '}
             <a href="/login" className="text-[#9147ff]">
               Login
