@@ -177,9 +177,9 @@ function PlaylistsTab() {
       {!loading && !error && playlists.length > 0 && (
         <div className="flex flex-col gap-4 p-4">
           <h1 className="text-2xl text-white">Playlists</h1>
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {playlists.map((playlist) => (
-              <div key={playlist._id} className="text-white w-full md:w-1/3 justify-start items-start p-3">
+              <div key={playlist._id} className="text-white justify-start items-start p-3">
                 <Link to={`/playlist/${playlist._id}`}>
                   <div className='relative w-full aspect-video'>
                     <img
