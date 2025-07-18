@@ -93,7 +93,7 @@ function Navbar({ onToggle }) {
 
   return (
     <>
-      <div className='flex justify-around items-center bg-[#141414] text-white p-4 h-16 fixed top-0 left-0 w-full z-10 md:ml-5'>
+      <div className='flex justify-around items-center bg-[#141414] text-white p-4 h-16 fixed top-0 left-0 w-full z-50 md:ml-5'>
         <button
           onClick={onToggle}
           className="hidden md:block fixed left-1 top-4 transform translate-x-1/2 
