@@ -12,14 +12,14 @@ function ChannelPage() {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const { user } = useAuth();
-  const { userid } = useParams();
+  const { channelusername } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `${VITE_API_URL}/users/channel/${userid}`,
+          `${VITE_API_URL}/users/channel/${channelusername}`,
           {
             withCredentials: true,
           }
@@ -35,7 +35,7 @@ function ChannelPage() {
       }
     };
     fetchUserData();
-  }, [userid]);
+  }, [channelusername]);
   const checkSubscription = async (channelId) => {
     if (!user) {
       return;

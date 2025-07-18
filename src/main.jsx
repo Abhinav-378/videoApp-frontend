@@ -27,7 +27,7 @@ const router = createBrowserRouter(
       <Route path='signup' element={<SignUp/>} />
       <Route path='login' element={<Login />} />
       <Route path='dashboard' element={<DashBoard />} />
-      <Route path='channel/:userid' element={<ChannelPage/>} >
+      <Route path='channel/:channelusername' element={<ChannelPage/>} >
         <Route index element={<VideosTab />} />
         <Route path="playlists" element={<PlaylistsTab />} />
         <Route path="tweets" element={<TweetsTab />} />
