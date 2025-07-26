@@ -1,12 +1,32 @@
-# React + Vite
+# 🎥 Videotube — Full-Stack Video Sharing Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Videotube** is a YouTube-inspired full-stack video-sharing platform built entirely from scratch using the MERN stack (MongoDB, Express.js, React, Node.js), with secure authentication, media upload capabilities, and rich user interaction features.
 
-Currently, two official plugins are available:
+## 🚀 Features
+- 🔐 **User Auth:** Secure sign-up/login with JWT and password hashing via bcrypt
+- 📹 **Video Management:** Upload videos and thumbnails to Cloudinary, with publish/unpublish functionality
+- 🧑‍💻 **Dashboard:** Channel management panel to upload, edit, and manage videos/playlists
+- 💬 **Community Features:** Like, comment, and subscribe to other users
+- 📝 **Tweets (Posts):** In-channel micro-posts similar to YouTube Community tab
+- 🗂 **Channel Tabs:** Each channel includes Videos, Playlists, Tweets, and Subscribed Channels
+- 🎞️ **Playlists:** Create/delete playlists with assigned videos
+- 📄 **User Pages:** Liked videos, Watch History, and Subscribers
+- 🌐 **Frontend:** Built using React + Vite + Tailwind CSS
+- 📡 **Backend:** Node.js + Express.js REST API, MongoDB, Mongoose, JWT, Cloudinary
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📂 Project Structure
+```bash
+backend/
+  ├── src/
+      ├── controllers/
+      ├── models/
+      ├── routes/
+      ├── middlewares/
+      └── db/
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+frontend/
+  ├── src/
+      ├── components/
+      │    └── channel/
+      ├── pages/
+      └── AuthContext.jsx
