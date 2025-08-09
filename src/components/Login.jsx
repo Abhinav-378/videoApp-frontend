@@ -56,12 +56,12 @@ function Login() {
     }
   return (
     <>
-      <div className='flex flex-col md:flex-row justify-center items-center bg-[#111111] text-white min-h-screen w-full'>
-        <div className='flex flex-col justify-center items-center gap-3 bg-[#111111] text-white p-4 w-full md:w-1/2'>
+      <div className='flex flex-col md:flex-row justify-center items-center bg-[#111111] text-white min-h-screen w-full pb-24 sm:pb-0'>
+        <div className='flex flex-col justify-center items-center gap-3 bg-[#111111] text-white sm:p-4 w-full md:w-1/2'>
             <h1 className='text-3xl md:text-4xl font-bold text-center'>Login</h1>
             <p className='text-sm text-center'>Welcome back! Please login to your account</p>
             {/* form */}
-            <form className='mt-5 flex flex-col justify-center items-center gap-3 bg-[#111111] text-white p-4 rounded-md w-full max-w-md' onSubmit={handleSubmit}>
+            <form className='mt-5 flex flex-col justify-center items-center gap-3 bg-[#111111] text-white py-4 sm:px-4 rounded-md w-full max-w-md' onSubmit={handleSubmit}>
                 <label className='text-sm'>Email</label>
                 <input 
                     type="email"
