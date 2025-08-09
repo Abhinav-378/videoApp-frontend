@@ -247,7 +247,7 @@ useEffect(() => {
         )
       }
       {video && (
-        <div className="flex flex-col items-start justify-center gap-2 w-full md:w-[80%] ">
+        <div className="flex flex-col items-start justify-center gap-2 w-full md:w-[80%] mx-auto p-1 ">
           <video controls className="w-full mt-4 rounded-lg">
             <source src={video.videoFile} type="video/mp4" />
             Your browser does not support the video tag.
