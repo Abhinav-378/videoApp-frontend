@@ -48,7 +48,7 @@ function Home() {
         <div className='flex flex-col md:flex-row flex-wrap items-start justify-start w-full mt-5'>
             {
                 videos.map((video)=>(
-                  <div  className='flex flex-col w-full md:w-1/3 justify-start items-start gap-1 p-4 ' key={video._id}>
+                  <div  className='flex flex-col w-full md:w-1/3 justify-start items-start gap-1 py-4 md:px-4  ' key={video._id}>
                     <Link to={`/watch/${video._id}`} key={video._id}>
                         <div className='relative'>
                             <img src={video.thumbnail} alt={video.title} className=" rounded-lg w-dvw h-auto  " />

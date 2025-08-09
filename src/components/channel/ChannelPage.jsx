@@ -122,11 +122,11 @@ function ChannelPage() {
             <img
               src={userData.coverImage}
               alt="cover"
-              className="w-full h-auto min-h-32 object-cover"
+              className="w-full h-auto object-cover rounded-l-sm"
             />
           )}
-          <div className="flex flex-col md:flex-row items-center justify-between w-full">
-            <div className="flex flex-wrap  items-center w-full p-5 gap-5">
+          <div className="flex flex-row flex-wrap   items-center justify-between ">
+            <div className="flex flex-wrap  items-center p-5 gap-5">
               <div>
                 {/* avatar */}
                 <img
@@ -144,7 +144,7 @@ function ChannelPage() {
                 </p>
               </div>
             </div>
-            <div className="pr-5">
+            <div className="px-5">
               {user?.username !== userData?.username ? (
                 <div onClick={() => {toggleSubscription(userData?._id)}}>
                   {userData?.isSubscribed ? 
@@ -169,12 +169,12 @@ function ChannelPage() {
             </div>
           </div>
           <div>
-            <div className="flex justify-start items-center gap-5 p-5">
+            <div className="flex sm:justify-start justify-center items-center gap-2 sm:gap-5 sm:px-5 py-5 text-sm sm:text-base">
               <NavLink
                 to=""
                 end
                 className={({ isActive }) =>
-                  `px-4 py-2 rounded-lg ${isActive ? "bg-[#9147ff]" : "bg-gray-700"} text-white`
+                  `sm:px-4 px-3 py-2 rounded-lg ${isActive ? "bg-[#9147ff]" : "bg-gray-700"} text-white`
                 }
               >
                 Videos
@@ -182,7 +182,7 @@ function ChannelPage() {
               <NavLink
                 to="playlists"
                 className={({ isActive }) =>
-                  `px-4 py-2 rounded-lg ${isActive ? "bg-[#9147ff]" : "bg-gray-700"} text-white`
+                  `sm:px-4 px-3 py-2  rounded-lg ${isActive ? "bg-[#9147ff]" : "bg-gray-700"} text-white`
                 }
               >
                 Playlists
@@ -190,7 +190,7 @@ function ChannelPage() {
               <NavLink
                 to="tweets"
                 className={({ isActive }) =>
-                  `px-4 py-2 rounded-lg ${isActive ? "bg-[#9147ff]" : "bg-gray-700"} text-white`
+                  `sm:px-4 px-3 py-2  rounded-lg ${isActive ? "bg-[#9147ff]" : "bg-gray-700"} text-white`
                 }
               >
                 Tweets
@@ -198,7 +198,7 @@ function ChannelPage() {
               <NavLink
                 to="subscribed"
                 className={({ isActive }) =>
-                  `px-4 py-2 rounded-lg ${isActive ? "bg-[#9147ff]" : "bg-gray-700"} text-white`
+                  `sm:px-4 px-3 py-2  rounded-lg ${isActive ? "bg-[#9147ff]" : "bg-gray-700"} text-white`
                 }
               >
                 Subscribed
