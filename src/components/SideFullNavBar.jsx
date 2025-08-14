@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
+import { useModal } from "../ModalContext";
 
 function SideFullNavBar({ isOpen, onToggle }) {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { showModal } = useModal();
 
   useEffect(() => {
     const handleResize = () => {
@@ -19,7 +21,7 @@ function SideFullNavBar({ isOpen, onToggle }) {
 
   const handleChannelClick = () => {
     if (!user) {
-      alert("Please login to access this feature");
+      showModal();
       return;
     }
     navigate(`/channel/${user.username}/playlists`);
@@ -27,15 +29,12 @@ function SideFullNavBar({ isOpen, onToggle }) {
   
   const handleMyContentClick = () => {
     if (!user) {
-      alert("Please login to access your content");
-      navigate('/login');
+      showModal();
       return;
     }
     navigate(`/channel/${user.username}`);
   };
 
-  // Check if we're on mobile
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
 
   return (
     <div

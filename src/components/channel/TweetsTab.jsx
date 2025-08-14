@@ -2,6 +2,7 @@ import React, { use, useEffect, useState } from "react";
 import axios from "axios";
 import { useOutletContext } from "react-router-dom";
 import EditTweetModal from "./EditTweetModal";
+import { useModal } from "../../ModalContext";
 
 const VITE_API_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
@@ -12,6 +13,7 @@ function TweetsTab() {
   const [editTweetData, setEditTweetData] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const { userId, currUser, channelUser } = useOutletContext();
+  const { showModal } = useModal();
   const fetchTweets = async () => {
     setLoading(true);
     try {
@@ -100,7 +102,7 @@ function TweetsTab() {
   }
   const toggleTweetLike = async (tweet) => {
     if (!currUser) {
-      alert("Please login to like the tweet");
+      showModal();
       return;
     }
     try {

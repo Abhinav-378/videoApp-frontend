@@ -3,12 +3,14 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../AuthContext";
+import { useModal } from "../ModalContext";
 import PlaylistModal from "./PlaylistModal";
 import Comments from "./Comments";
 
 function VideoPage() {
   const { videoId } = useParams();
   const { user } = useAuth();
+  const { showModal } = useModal();
   const [video, setVideo] = useState(null);
   const [channel, setChannel] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -108,7 +110,7 @@ function VideoPage() {
   };
   const toggleLike = async (videoId) => {
     if (!user) {
-      alert("Please login to like the video");
+      showModal()
       return;
     }  
     try {
@@ -138,7 +140,7 @@ function VideoPage() {
   }
   const toggleSubscription = async () => {
     if (!user) {
-      navigate("/login");
+      showModal();
       return;
     }
     try {
@@ -189,7 +191,7 @@ function VideoPage() {
   };
   const openPlaylistModal = () => {
     if(!user){
-      alert("Please login to create a playlist");
+      showModal();
       return;
     }
     setShowPlaylistModal(true);
