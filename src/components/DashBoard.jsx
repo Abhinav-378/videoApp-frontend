@@ -246,7 +246,7 @@ function DashBoard() {
         </div>
         {/* will display all the videos in a table later after implementing upload video feature*/}
         {/* TABLE consists of toggleStatus, status, uploaded(small thumbnail with title), uploaded on, likes and each row will contain its own delete and edit icon for updating a video */}
-        <div className="hidden md:block">
+        <div className="hidden md:block w-full">
           <table className="w-full text-left border-collapse border border-gray-700 mt-5">
             <thead>
             <tr className="bg-gray-800 text-gray-200">
@@ -291,7 +291,7 @@ function DashBoard() {
                   <td className="border border-gray-700 px-4 py-2">
                     {new Date(video.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="border border-gray-700 px-4 py-2">{0}</td>
+                  <td className="border border-gray-700 px-4 py-2">{video.likes}</td>
                   <td className="border border-none py-2 px-4 ">
                     <div className="flex justify-around items-center gap-3">
                       {/* edit and delete icons */}
@@ -377,7 +377,7 @@ function DashBoard() {
       <p className="text-gray-400">
         Uploaded: {new Date(video.createdAt).toLocaleDateString()}
       </p>
-      <p className="text-gray-400">Likes: {0}</p>
+      <p className="text-gray-400">Likes: {video.likes}</p>
 
 
       {/* Action buttons */}
