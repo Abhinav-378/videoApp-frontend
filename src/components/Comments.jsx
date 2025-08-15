@@ -2,6 +2,7 @@ import { use, useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../AuthContext";
 import { useParams } from "react-router-dom";
+import { useModal } from "../ModalContext";
 function Comments({ videoOwnerId }) {
     const VITE_API_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
@@ -10,6 +11,7 @@ function Comments({ videoOwnerId }) {
     const [error, setError] = useState(null);
     const { user } = useAuth();
     const { videoId} = useParams()
+    const { showModal } = useModal();
     function timeAgo(dateString) {
     const now = new Date();
     const date = new Date(dateString);
@@ -34,7 +36,7 @@ function Comments({ videoOwnerId }) {
           },
         }
       );
-      console.log(response.data.data); // actual data consists of {totalComments: 1, page: 1, limit: 10, totalPages: 1, comments: Array(1)}, we will take just array for now
+      // console.log(response.data.data); // actual data consists of {totalComments: 1, page: 1, limit: 10, totalPages: 1, comments: Array(1)}, we will take just array for now
       setCommentsList(response.data.data.comments);
     } catch (error) {
         console.log("error", error);
@@ -67,7 +69,7 @@ function Comments({ videoOwnerId }) {
             },
           }
         );
-        console.log(response.data.data);
+        // console.log(response.data.data);
         fetchComments();
         document.querySelector("textarea").value = ""; 
       } catch (error) {
@@ -127,6 +129,60 @@ function Comments({ videoOwnerId }) {
       };
       
     }
+    // toggle comment like
+    const toggleCommentLike = async (comment) => {
+      if(!user){
+        showModal();
+        return;
+      }
+      const commentId = comment._id;
+      try {
+        setLoading(true);
+        const response = await axios.post(
+          `${VITE_API_URL}/likes/toggle/c/${commentId}`,
+          {},
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        // console.log(response.data.data);
+        // if like is added
+        if(response.data.data){
+          const updatedComment = response.data.data;
+          const updatedCommentsList = commentsList.map((c) =>{
+            if(c._id === updatedComment.comment){
+              return {
+                ...c,
+                likesCount: c.likesCount+1,
+                likesDetails: [...c.likesDetails, updatedComment]
+              }
+            }
+            return c;
+          });
+          setCommentsList(updatedCommentsList);
+        }else{ // like is removed
+          const updatedCommentsList = commentsList.map((c) =>{
+            if(c._id === commentId){
+              return {
+                ...c,
+                likesCount: c.likesCount-1,
+                likesDetails: c.likesDetails.filter(like => like.likedBy !== user._id)
+              }
+            }
+            return c;
+          });
+          setCommentsList(updatedCommentsList);
+        }
+      } catch (error) {
+        console.error("Error toggling comment like:", error);
+      }
+      finally{
+        setLoading(false);
+      }
+    }
 
     const handleDeleteComment = async (commentId) => {
       if (!user) {
@@ -143,7 +199,7 @@ function Comments({ videoOwnerId }) {
             },
           }
         );
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setCommentsList((prevComments) =>
           prevComments.filter((comment) => comment._id !== commentId)
         );
@@ -183,7 +239,7 @@ function Comments({ videoOwnerId }) {
           </div>
         </div>
       )}
-      {commentsList.length > 0 ? (
+      {commentsList && commentsList.length > 0 ? (
         <div className="flex flex-col gap-4 px-5  pt-4">
           {commentsList.map((comment) => (
             <div key={comment._id} id={`comment-${comment._id}`} className="w-full p-4 ">
@@ -200,9 +256,9 @@ function Comments({ videoOwnerId }) {
                   <p className="content">{comment.content}</p>
                   
                     {/* like button */}
-                  {/* <div onClick={() => toggleCommentLike(comment)} className="flex items-center gap-4 mt-2">
+                  <div onClick={() => toggleCommentLike(comment)} className="flex items-center gap-4 mt-2">
                     {
-                      (user && comment.likesDetails && comment.likesDetails.some(like => like.likedBy === currUser._id)) ?
+                      (user && comment.likesDetails && comment.likesDetails.some(like => like.likedBy === user._id)) ?
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 cursor-pointer text-rose-500">
                           <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
                         </svg>
@@ -211,9 +267,9 @@ function Comments({ videoOwnerId }) {
                           <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                         </svg>
                     }
-                    <p className="text-sm text-gray-500 font-medium">{comment.likesCount} likes</p>
+                    <p className="text-sm text-gray-500 font-medium">{comment.likesCount || 0} likes</p>
 
-                  </div> */}
+                  </div>
 
                 </div>
               </div>
