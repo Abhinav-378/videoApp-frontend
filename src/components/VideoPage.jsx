@@ -257,7 +257,7 @@ useEffect(() => {
           <h1 className="text-white text-xl my-2 font-semibold">
             {video.title}
           </h1>
-          <div className="flex flex-col md:flex-row justify-around items-start md:justify-between md:items-center w-full px-5">
+          <div className="flex flex-col sm:flex-row justify-around items-start sm:justify-between sm:items-center w-full px-5">
             <Link to={`/channel/${channel?.username}`} >
             <div className="flex flex-row justify-center items-center gap-2">
               <img
@@ -273,7 +273,7 @@ useEffect(() => {
               </div>
             </div>
             </Link>
-            <div className="flex flex-row justify-between items-center gap-2 md:gap-4 w-full md:w-auto">
+            <div className="flex flex-row justify-between items-center gap-2 mt-4 sm:mt-0 sm:gap-4 w-full sm:w-auto">
               <div onClick={() => {toggleLike(video?._id)}} className="flex flex-col justify-center items-center ">
                 {
                   liked
@@ -294,7 +294,7 @@ useEffect(() => {
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
                   </svg>
-                  <span className="hidden md:block">
+                  <span className="hidden sm:block">
                     Save
                   </span>
                 </div>
