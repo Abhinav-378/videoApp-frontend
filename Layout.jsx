@@ -37,7 +37,7 @@ function Layout() {
         </div>
         <div className={`flex-1 transition-all duration-300`}>
           <Navbar onToggle={toggleSidebar} />
-          <main className="p-4 pt-16">
+          <main className="p-4 pt-16 pb-16 md:pb-0">
             <Outlet />
           </main>
         </div>
